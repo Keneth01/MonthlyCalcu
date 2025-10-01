@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Monthly Bill Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 500px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 10px;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      width: 100%;
+      background-color: #4caf50;
+      color: white;
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .result {
+      margin-top: 20px;
+      font-size: 16px;
+      font-weight: normal;
+      line-height: 1.6;
+    }
+    .person {
+      margin-bottom: 20px;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Monthly Bill Calculator</h2>
+
+  <label>Electric Bill Total (₱)</label>
+  <input type="number" id="electric" placeholder="e.g. 3000" />
+
+  <label>Water Bill Total (₱)</label>
+  <input type="number" id="water" placeholder="e.g. 1000" />
+
+  <label>Internet/WiFi Bill Total (₱)</label>
+  <input type="number" id="internet" placeholder="default: 1150" value="1150"/>
+
+  <button onclick="calculateBills()">Calculate</button>
+
+  <div class="result" id="result"></div>
+
+  <script>
+    function calculateBills() {
+      const electric = parseFloat(document.getElementById("electric").value) || 0;
+      const water = parseFloat(document.getElementById("water").value) || 0;
+      const internet = parseFloat(document.getElementById("internet").value) || 1150;
+
+      // ELECTRIC BILL
+      const electric_fixed_me = 750;
+      const electric_fixed_family = 750;
+      const electric_remaining = electric - (electric_fixed_me + electric_fixed_family);
+      const electric_split = electric_remaining / 2;
+
+      const electric_me = electric_fixed_me + electric_split;
+      const electric_gf = electric_split;
+      const electric_family = electric_fixed_family;
+
+      // INTERNET BILL (manual split)
+      const internet_me = 375;
+      const internet_gf = 375;
+      const internet_family = 400;
+
+      // WATER BILL
+      const water_fixed_family = 400;
+      const water_remaining = water - water_fixed_family;
+      const water_split = water_remaining / 2;
+
+      const water_me = water_split;
+      const water_gf = water_split;
+      const water_family = water_fixed_family;
+
+      // RENT (Fixed updated to ₱1750)
+      const rent_me = 875;
+      const rent_gf = 875;
+      const rent_family = 0;
+
+      // TOTALS
+      const total_me = electric_me + internet_me + water_me + rent_me;
+      const total_gf = electric_gf + internet_gf + water_gf + rent_gf;
+      const total_family = electric_family + internet_family + water_family + rent_family;
+
+      // OUTPUT
+      document.getElementById("result").innerHTML = `
+        <div class="person">
+          <strong>YOU</strong><br>
+          Electric: 750 + ${electric_split.toFixed(2)} = ₱${electric_me.toFixed(2)}<br>
+          Water: ₱${water_me.toFixed(2)}<br>
+          WiFi: ₱${internet_me.toFixed(2)}<br>
+          Rent: ₱${rent_me.toFixed(2)}<br>
+          <strong>TOTAL: ₱${total_me.toFixed(2)}</strong>
+        </div>
+
+        <div class="person">
+          <strong>GF</strong><br>
+          Electric: ₱${electric_gf.toFixed(2)}<br>
+          Water: ₱${water_gf.toFixed(2)}<br>
+          WiFi: ₱${internet_gf.toFixed(2)}<br>
+          Rent: ₱${rent_gf.toFixed(2)}<br>
+          <strong>TOTAL: ₱${total_gf.toFixed(2)}</strong>
+        </div>
+
+        <div class="person">
+          <strong>FAMILY</strong><br>
+          Electric: ₱${electric_family.toFixed(2)}<br>
+          Water: ₱${water_family.toFixed(2)}<br>
+          WiFi: ₱${internet_family.toFixed(2)}<br>
+          Rent: ₱${rent_family.toFixed(2)}<br>
+          <strong>TOTAL: ₱${total_family.toFixed(2)}</strong>
+        </div>
+      `;
+    }
+  </script>
+
+</body>
+</html>
